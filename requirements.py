@@ -6,4 +6,4 @@ motor>=3.7.1
 python-dotenv>=1.1.1
 jinja2>=3.1.6
 aiofiles>=24.1.0
-pymongo>=4.13.2 
+pymongo>=4.13.2
