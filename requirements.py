@@ -1,9 +1,0 @@
-pyrogram>=2.0.106
-tgcrypto>=1.2.5
-fastapi>=0.116.0
-uvicorn[standard]>=0.35.0
-motor>=3.7.1
-python-dotenv>=1.1.1
-jinja2>=3.1.6
-aiofiles>=24.1.0
-pymongo>=4.13.2
