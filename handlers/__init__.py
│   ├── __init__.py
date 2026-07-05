@@ -1,16 +1,8 @@
-from pyrogram import Client
-from config import Config
-from handlers import register_handlers
+from .start import register as register_start
+from .upload import register as register_upload
+from .admin import register as register_admin
 
-app = Client(
-    "InfinityFileStream",
-    api_id=Config.API_ID,
-    api_hash=Config.API_HASH,
-    bot_token=Config.BOT_TOKEN
-)
-
-register_handlers(app)
-
-print("🤖 Infinity FileStream Bot Started!")
-
-app.run()
+def register_handlers(app):
+    register_start(app)
+    register_upload(app)
+    register_admin(app)
