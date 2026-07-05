@@ -4,7 +4,10 @@ from fastapi.templating import Jinja2Templates
 
 from database import get_file
 
-app = FastAPI()
+app = FastAPI(
+    title="Infinity FileStream",
+    version="1.0.0"
+)
 
 templates = Jinja2Templates(directory="templates")
 
@@ -32,8 +35,8 @@ async def file_page(request: Request, file_code: str):
         "download.html",
         {
             "request": request,
-            "file_id": file["_id"],
             "file_name": file["file_name"],
-            "file_size": file["file_size"]
+            "file_size": file["file_size"],
+            "file_code": file_code
         }
     )
