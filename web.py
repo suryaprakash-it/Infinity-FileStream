@@ -1,17 +1,39 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+from database import get_file
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
+
 
 @app.get("/")
 async def home():
     return {
         "status": "online",
-        "bot": "Infinity FileStream"
+        "project": "Infinity FileStream"
     }
 
-@app.get("/file/{file_id}")
-async def get_file(file_id: str):
-    return {
-        "message": "Download system coming soon!",
-        "file_id": file_id
-    }
+
+@app.get("/file/{file_code}", response_class=HTMLResponse)
+async def file_page(request: Request, file_code: str):
+
+    file = await get_file(file_code)
+
+    if not file:
+        return HTMLResponse(
+            "<h2>❌ File Not Found</h2>",
+            status_code=404
+        )
+
+    return templates.TemplateResponse(
+        "download.html",
+        {
+            "request": request,
+            "file_id": file["_id"],
+            "file_name": file["file_name"],
+            "file_size": file["file_size"]
+        }
+    )
