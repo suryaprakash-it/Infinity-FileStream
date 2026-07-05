@@ -28,3 +28,20 @@ async def total_users():
 
 async def total_files():
     return await files.count_documents({})
+
+
+
+
+async def get_file(file_code: str):
+    return await files.find_one({"_id": file_code})
+
+
+async def delete_file(file_code: str):
+    await files.delete_one({"_id": file_code})
+
+
+async def update_file(file_code: str, data: dict):
+    await files.update_one(
+        {"_id": file_code},
+        {"$set": data}
+    )
