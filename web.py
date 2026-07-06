@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from telegram_client import bot
 from database import get_file
 import os
+from handlers import register_handlers
 
 templates = Jinja2Templates(directory="templates")
 
