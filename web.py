@@ -1,18 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse
-
-from database import get_file
-
-app = FastAPI(
-    title="Infinity FileStream",
-    version="1.0.0"
-)
-
-templates = Jinja2Templates(directory="templates")
-
-
+from fastapi.responses import RedirectResponse
+from telegram_client import bot
 
 @app.get("/download/{file_code}")
 async def download_file(file_code: str):
@@ -25,39 +12,18 @@ async def download_file(file_code: str):
             status_code=404
         )
 
-    return {
-        "status": "coming_soon",
-        "message": "Infinity FileStream v2 Download API"
-    }
+    tg_file = await bot.get_messages(
+        file["chat_id"],
+        file["message_id"]
+    )
 
+    media = (
+        tg_file.document
+        or tg_file.video
+        or tg_file.audio
+        or tg_file.photo
+    )
 
-
-@app.get("/")
-async def home():
-    return {
-        "status": "online",
-        "project": "Infinity FileStream"
-    }
-
-
-@app.get("/file/{file_code}", response_class=HTMLResponse)
-async def file_page(request: Request, file_code: str):
-
-    file = await get_file(file_code)
-
-    if not file:
-        return HTMLResponse(
-            "<h2>❌ File Not Found</h2>",
-            status_code=404
-        )
-
-    return templates.TemplateResponse(
-    request,
-    "download.html",
-    {
-        "file_name": file["file_name"],
-        "file_size": file["file_size"],
-        "file_code": file_code
-    }
-)
-    
+    return RedirectResponse(
+        media.file_id
+    )
