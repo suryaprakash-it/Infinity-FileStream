@@ -1,4 +1,4 @@
-from pyrogram import Client
+from telegram_client import bot
 from config import Config
 
 bot = Client(
