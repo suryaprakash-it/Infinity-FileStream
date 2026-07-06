@@ -13,9 +13,15 @@ templates = Jinja2Templates(directory="templates")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("🤖 Starting Bot...")
+
+    register_handlers(bot)
+
     await bot.start()
+
     print("✅ Bot Started!")
+
     yield
+
     print("🛑 Stopping Bot...")
     await bot.stop()
 
