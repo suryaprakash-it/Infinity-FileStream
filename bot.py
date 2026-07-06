@@ -1,16 +1,8 @@
-from pyrogram import Client
-from config import Config
+from telegram_client import telegram
 from handlers import register_handlers
 
-app = Client(
-    "InfinityFileStream",
-    api_id=Config.API_ID,
-    api_hash=Config.API_HASH,
-    bot_token=Config.BOT_TOKEN
-)
-
-register_handlers(app)
+register_handlers(telegram)
 
 print("🤖 Infinity FileStream Bot Started!")
 
-app.run()
+telegram.run()
