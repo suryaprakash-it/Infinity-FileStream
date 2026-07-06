@@ -1,11 +1,13 @@
+from contextlib import asynccontextmanager
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
-from contextlib import asynccontextmanager
+
 from telegram_client import bot
-from database import get_file
-import os
 from handlers import register_handlers
+from database import get_file
 
 templates = Jinja2Templates(directory="templates")
 
@@ -15,12 +17,14 @@ async def lifespan(app: FastAPI):
     print("🤖 Starting Bot...")
 
     register_handlers(bot)
-    print("✅ Handlers Registered!")
 
     await bot.start()
+
     print("✅ Bot Started!")
 
     yield
+
+    print("🛑 Stopping Bot...")
 
     await bot.stop()
 
@@ -30,8 +34,6 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
-
-templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
@@ -54,9 +56,9 @@ async def file_page(request: Request, file_code: str):
         )
 
     return templates.TemplateResponse(
-        request,
         "download.html",
         {
+            "request": request,
             "file_name": file["file_name"],
             "file_size": file["file_size"],
             "file_code": file_code
