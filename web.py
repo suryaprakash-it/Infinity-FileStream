@@ -1,5 +1,20 @@
 from fastapi.responses import RedirectResponse
 from telegram_client import bot
+from contextlib import asynccontextmanager
+from telegram_client import bot
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await bot.start()
+    yield
+    await bot.stop()
+
+app = FastAPI(
+    title="Infinity FileStream",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 @app.get("/download/{file_code}")
 async def download_file(file_code: str):
