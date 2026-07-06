@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
@@ -7,13 +6,23 @@ from telegram_client import bot
 from database import get_file
 import os
 
+templates = Jinja2Templates(directory="templates")
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("🤖 Starting Bot...")
+    await bot.start()
+    print("✅ Bot Started!")
+    yield
+    print("🛑 Stopping Bot...")
+    await bot.stop()
 
 
 app = FastAPI(
     title="Infinity FileStream",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 templates = Jinja2Templates(directory="templates")
