@@ -15,14 +15,13 @@ async def lifespan(app: FastAPI):
     print("🤖 Starting Bot...")
 
     register_handlers(bot)
+    print("✅ Handlers Registered!")
 
     await bot.start()
-
     print("✅ Bot Started!")
 
     yield
 
-    print("🛑 Stopping Bot...")
     await bot.stop()
 
 
