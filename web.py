@@ -18,6 +18,10 @@ async def lifespan(app: FastAPI):
 
     register_handlers(bot)
 
+    @bot.on_message()
+    async def debug(client, message):
+        print(f"📩 Received: {message.text}")
+
     await bot.start()
 
     print("✅ Bot Started!")
