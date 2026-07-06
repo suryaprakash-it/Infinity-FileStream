@@ -55,6 +55,20 @@ async def download_file(file_code: str):
             status_code=404
         )
 
-    return HTMLResponse(
-        "<h2>🚧 Download system is being connected...</h2>"
+    msg = await bot.get_messages(
+        file["chat_id"],
+        file["message_id"]
+    )
+
+    os.makedirs("downloads", exist_ok=True)
+
+    path = await bot.download_media(
+        msg,
+        file_name=f"downloads/{file['file_name']}"
+    )
+
+    return FileResponse(
+        path=path,
+        filename=file["file_name"],
+        media_type="application/octet-stream"
     )
