@@ -1,21 +1,3 @@
-from fastapi.responses import RedirectResponse
-from telegram_client import bot
-from contextlib import asynccontextmanager
-from telegram_client import bot
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await bot.start()
-    yield
-    await bot.stop()
-
-app = FastAPI(
-    title="Infinity FileStream",
-    version="1.0.0",
-    lifespan=lifespan
-)
-
 @app.get("/download/{file_code}")
 async def download_file(file_code: str):
 
@@ -27,18 +9,6 @@ async def download_file(file_code: str):
             status_code=404
         )
 
-    tg_file = await bot.get_messages(
-        file["chat_id"],
-        file["message_id"]
-    )
-
-    media = (
-        tg_file.document
-        or tg_file.video
-        or tg_file.audio
-        or tg_file.photo
-    )
-
-    return RedirectResponse(
-        media.file_id
+    return HTMLResponse(
+        "<h2>🚧 Download system is being connected...</h2>"
     )
