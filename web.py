@@ -52,11 +52,12 @@ async def file_page(request: Request, file_code: str):
         )
 
     return templates.TemplateResponse(
-        "download.html",
-        {
-            "request": request,
-            "file_name": file["file_name"],
-            "file_size": file["file_size"],
-            "file_code": file_code
-        }
+    request,
+    "download.html",
+    {
+        "file_name": file["file_name"],
+        "file_size": file["file_size"],
+        "file_code": file_code
+    }
+)
     )
